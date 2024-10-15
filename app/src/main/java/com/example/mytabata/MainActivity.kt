@@ -20,6 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.mytabata.ui.theme.MyTabataTheme
 
+var counterState : Boolean = false
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +42,16 @@ class MainActivity : ComponentActivity() {
 fun Counter(modifier: Modifier = Modifier) {
     var theCounter by remember { mutableStateOf("90") }
 
+    var myCounter =object : CountDownTimer(90000, 1000) {
+
+        override fun onTick(millisUntilFinished: Long) {
+            theCounter = (millisUntilFinished / 1000).toString()
+        }
+
+        override fun onFinish() {
+            theCounter = "Finish"
+        }
+    }
 
     Column(
         modifier = modifier.padding(50.dp)
@@ -49,16 +61,13 @@ fun Counter(modifier: Modifier = Modifier) {
         )
 
         Button(onClick = {
-            object : CountDownTimer(90000, 1000) {
 
-                override fun onTick(millisUntilFinished: Long) {
-                    theCounter = (millisUntilFinished / 1000).toString()
-                }
-
-                override fun onFinish() {
-                    theCounter = "Finish"
-                }
-            }.start()
+            if (counterState == false) {
+                myCounter.start()
+                counterState = true
+            }else {
+                myCounter.cancel()
+            }
         }) {
             Text(
                 text = "pulsar"
@@ -68,20 +77,5 @@ fun Counter(modifier: Modifier = Modifier) {
 }
 
 
-/*
-@Composable
-fun Countdown() {
-    object : CountDownTimer(30000, 1000) {
 
-        override fun onTick(millisUntilFinished: Long) {
-            mTextField.setText("seconds remaining: " + millisUntilFinished / 1000)
-        }
-
-        override fun onFinish() {
-            mTextField.setText("done!")
-        }
-    }.start()
-}
-
- */
 
