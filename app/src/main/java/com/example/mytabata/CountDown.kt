@@ -12,20 +12,20 @@ class CountDown(var seconds: Int, var loquehacealhacertick: (Long) -> Unit) {
 
         override fun onTick(millisUntilFinished: Long) {
             if (estado) loquehacealhacertick(millisUntilFinished / 1000)
+            Log.i("PrimerCounter", "Segundos restantes: ${millisUntilFinished / 1000}")
         }
 
         override fun onFinish() {
             estado = false
-            Log.i("end", "Primer contador terminado")
+            Log.i("PrimerCounter", "Primer contador terminado")
 
-            // Iniciar el segundo contador al terminar el primero
             startSecondCounter()
         }
     }
 
-    // Contador 2
-    var secondCounter = object : CountDownTimer(10000L, 1000) { // 10 segundos para el segundo contador
+    var secondCounter = object : CountDownTimer(10000L, 1000) {
         override fun onTick(millisUntilFinished: Long) {
+            loquehacealhacertick(millisUntilFinished / 1000)
             Log.i("SecondCounter", "Segundos restantes: ${millisUntilFinished / 1000}")
         }
 
@@ -34,7 +34,6 @@ class CountDown(var seconds: Int, var loquehacealhacertick: (Long) -> Unit) {
         }
     }
 
-    // Función para iniciar el segundo contador
     private fun startSecondCounter() {
         Log.i("SecondCounter", "Iniciando segundo contador")
         secondCounter.start()
