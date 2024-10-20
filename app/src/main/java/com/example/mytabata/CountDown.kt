@@ -2,61 +2,72 @@ package com.example.mytabata
 
 import android.os.CountDownTimer
 import android.util.Log
-import androidx.compose.material3.Text
 
-class CountDown(var seconds: Int, var loquehacealhacertick: (Long) -> Unit) {
+class CountDown(var seconds: Int, var veces: Int, var loquehacealhacertick: (Long) -> Unit) {
     private var estado: Boolean = false
+    private var contador: Int = 0
 
-    // Contador 1
-    var myCounter = object : CountDownTimer((seconds * 1000L), 1000) {
-
+    var contadorTrabajo = object : CountDownTimer((seconds * 1000L), 1000) {
         override fun onTick(millisUntilFinished: Long) {
             if (estado) loquehacealhacertick(millisUntilFinished / 1000)
-            Log.i("PrimerCounter", "Segundos restantes: ${millisUntilFinished / 1000}")
+            Log.i("Contador ${contador}", "Segundos restantes: ${millisUntilFinished / 1000}")
         }
 
         override fun onFinish() {
             estado = false
-            Log.i("PrimerCounter", "Primer contador terminado")
+            Log.i("Contador ${contador}", "Contador ${contador} terminado. Conteo: $contador")
 
-            startSecondCounter()
+            if (contador < veces) {
+                startContadorDescanso()
+            } else {
+                Log.i("Contador", "Contador completado $veces veces.")
+            }
         }
     }
 
-    var secondCounter = object : CountDownTimer(10000L, 1000) {
+    var contadorDescanso = object : CountDownTimer((seconds * 500L), 1000) {
         override fun onTick(millisUntilFinished: Long) {
             loquehacealhacertick(millisUntilFinished / 1000)
-            Log.i("SecondCounter", "Segundos restantes: ${millisUntilFinished / 1000}")
+            Log.i("Contador ${contador}", "Segundos restantes: ${millisUntilFinished / 1000}")
         }
 
         override fun onFinish() {
-            Log.i("SecondCounter", "Segundo contador terminado")
+            Log.i("Contador ${contador}", "Contador de descanso terminado")
+
+            if (contador < veces) {
+                startContadorTrabajo()
+            } else {
+                Log.i("Contador", "Todos los contadores completados.")
+            }
         }
     }
 
-    private fun startSecondCounter() {
-        Log.i("SecondCounter", "Iniciando segundo contador")
-        secondCounter.start()
+    private fun startContadorDescanso() {
+        contador++
+        estado = true
+        Log.i("Contador ${contador}", "Iniciando contador de descanso")
+        contadorDescanso.start()
+    }
+
+    private fun startContadorTrabajo() {
+        contador++
+        Log.i("Contador ${contador}", "Iniciando contador de trabajo")
+        estado = true
+        contadorTrabajo.start()
     }
 
     fun toggle() {
-        Log.i("estado", "toggle: $estado")
-        if (this.estado == true) {
+        if (this.estado) {
             this.cancel()
         } else {
-            Log.i("empezar", "toggle: start")
-            this.start()
+            contador = 0
+            startContadorTrabajo()
         }
-    }
-
-    fun start() {
-        estado = true
-        this.myCounter.start()
     }
 
     fun cancel() {
         estado = false
-        this.myCounter.cancel()
-        this.secondCounter.cancel()
+        this.contadorTrabajo.cancel()
+        this.contadorDescanso.cancel()
     }
 }
