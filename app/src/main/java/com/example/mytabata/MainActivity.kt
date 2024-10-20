@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -39,7 +40,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Counter(modifier: Modifier = Modifier) {
     var theCounter by remember { mutableStateOf(0L) }
-    var miConterDown by remember{ mutableStateOf(CountDown(9, {newvalue -> theCounter = newvalue}))}
+
+    var miConterDown by remember{ mutableStateOf(CountDown(10, {newvalue -> theCounter = newvalue}))}
 
 
 
@@ -57,7 +59,9 @@ fun Counter(modifier: Modifier = Modifier) {
             )
         }
     }
+
 }
+
 
 
 
