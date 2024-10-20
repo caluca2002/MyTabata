@@ -39,4 +39,8 @@ class CountDown(var seconds: Int, var loquehacealhacertick: (Long) -> Unit) {
         estado = false
         this.myCounter.cancel()
     }
+
+    fun myEstado(): Boolean {
+        return this.estado
+    }
 }
